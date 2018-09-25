@@ -1,0 +1,109 @@
+<html>
+
+<head>
+    <title>testing</title>
+
+</head>
+
+<body>
+    <h1>json api testing</h1>
+    <hr>
+    <h3>get user</h3>
+    ID: <input type="text" id="htmlID"><button id="jsonSubmit">Submit</button>
+    <br>
+    first name: <span id="jsonfName">s</span>
+    <br>
+    last name: <span id="jsonlName">s</span>
+    <br>
+    id: <span id="jsonIDs">s</span>
+    <hr>
+    <h3>add user</h3>
+    <form action="http://localhost:8080/addcontact/"  target="_blank" method="POST" enctype="application/json"
+        accept-charset="utf-8">
+        First Name:<input type="text" name="fName" id="fName">
+        <br>
+        Last Name:<input type="text" name="lName" id="lName">
+        <br>
+        E-Mail: <input type="text" name="email" id="email">
+        <br>
+        Address:<input type="text" name="address" id="address">
+        <br>
+        Phone #1:<input type="text" name="phone1" id="phone1">
+        <br>
+        Phone #2:<input type="text" name="phone2" id="phone2">
+        <br>
+        Company:<input type="text" name="comp" id="comp">
+        <br>
+        Notes:<input type="text" name="notes" id="notes">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <hr>
+    <h3>list all users on mongodb</h3>
+    <br>
+    <button id="getallUsers">Fetch Users</button>
+    <br>
+    <p id="tableDemo"></p>
+
+
+
+    <script>
+        var xmlhttp, txt = " ",x,myObj;
+        document.getElementById("jsonSubmit").addEventListener("click", submitJSON);
+        document.getElementById("getallUsers").addEventListener("click", getJsonUsers);
+
+        function getJsonUsers() {
+            txt = " ";
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    myObj = JSON.parse(this.responseText);
+                    txt += "<table border='1'>"
+                    txt += "<tr>"
+                    txt += "<th> Firstname </th> <th> Lastname </th> <th > ID </th></tr> "
+                    for (x in myObj) {
+                        txt += "<tr><td>" + myObj[x].fName + "</td><td>" + myObj[x].lName + "</td><td>" + myObj[x]._id + "</td></tr>";
+                    }
+                    txt += "</table>"
+                    document.getElementById("tableDemo").innerHTML = txt;
+                }
+            }
+            xmlhttp.open("GET", "http://localhost:8080/getcontacts", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send();
+        }
+        //getuser
+        var htmlvalue;
+
+        function submitJSON() {
+            htmlvalue = document.getElementById("htmlID").value;
+            getJSON(htmlvalue);
+        }
+
+        function getJSON(jsonID) {
+            var onReq = new XMLHttpRequest();
+            onReq.onreadystatechange = reqListener;
+            onReq.open("GET", "http://localhost:8080/getcontact/" + jsonID);
+            onReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            onReq.send();
+
+            function reqListener() {
+                if (onReq.readyState === XMLHttpRequest.DONE) {
+                    if (onReq.status === 200) {
+                        console.warn("seems to work");
+                        var data = JSON.parse(onReq.responseText);
+                        document.getElementById('jsonfName').innerHTML = data.fName;
+                        document.getElementById('jsonlName').innerHTML = data.lName;
+                        document.getElementById('jsonIDs').innerHTML = data._id;
+                    } else {
+                        console.error('error within this function');
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
