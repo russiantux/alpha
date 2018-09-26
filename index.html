@@ -18,7 +18,7 @@
     id: <span id="jsonIDs">s</span>
     <hr>
     <h3>add user</h3>
-    <form action="http://localhost:8080/addcontact/"  target="_blank" method="POST" enctype="application/json"
+    <form action="http://localhost:8080/addcontact/"   method="POST" enctype="application/json"
         accept-charset="utf-8">
         First Name:<input type="text" name="fName" id="fName">
         <br>
@@ -36,7 +36,7 @@
         <br>
         Notes:<input type="text" name="notes" id="notes">
         <br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" >
     </form>
 
     <hr>
@@ -50,20 +50,34 @@
 
     <script>
         var xmlhttp, txt = " ",x,myObj;
+        var delBtn = " ";
         document.getElementById("jsonSubmit").addEventListener("click", submitJSON);
         document.getElementById("getallUsers").addEventListener("click", getJsonUsers);
+        document.onload = getJsonUsers();
+        
+
+        function refreshT() {
+            getJsonUsers();
+            location.reload();
+        }
 
         function getJsonUsers() {
             txt = " ";
+            
             xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     myObj = JSON.parse(this.responseText);
+                    
+            
                     txt += "<table border='1'>"
                     txt += "<tr>"
-                    txt += "<th> Firstname </th> <th> Lastname </th> <th > ID </th></tr> "
+                    txt += "<th> Firstname </th> <th> Lastname </th> <th> ID </th> <th> Delete?</th></tr>"
+                    
+
                     for (x in myObj) {
-                        txt += "<tr><td>" + myObj[x].fName + "</td><td>" + myObj[x].lName + "</td><td>" + myObj[x]._id + "</td></tr>";
+                        
+                        txt += "<tr><td>" + myObj[x].fName + "</td><td>" + myObj[x].lName + "</td><td>" + myObj[x]._id + "</td><td><form  method='delete' action='http://localhost:8080/delcontact/" + myObj[x]._id + "'> <input id='btn1' type='submit' value='Submit' onclick='refreshT'> </form> </td></tr>";
                     }
                     txt += "</table>"
                     document.getElementById("tableDemo").innerHTML = txt;
@@ -75,6 +89,8 @@
         }
         //getuser
         var htmlvalue;
+        
+        document.getElementById("btn1").addEventListener("click", refreshT);
 
         function submitJSON() {
             htmlvalue = document.getElementById("htmlID").value;

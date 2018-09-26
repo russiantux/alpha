@@ -35,7 +35,8 @@ module.exports = function(app, db) {
           console.log("ERROR 200: FAILED TO ADD USER. Detailed error: " + err);
         } else {
           console.log('user has been added.');
-          res.send(result.ops[0]);
+          res.redirect('back');
+          //res.send(result.ops[0]);
         }
       });
     });
@@ -75,14 +76,16 @@ module.exports = function(app, db) {
     }
       );
 
-      app.delete('/contact/:id', (req, res) => {
+      app.get('/delcontact/:id', (req, res) => {
         const id = req.params.id;
         const details = { '_id': new ObjectID(id) };
         db.collection('alphausers').remove(details, (err, item) => {
           if (err) {
             res.send({'error':'An error has occurred'});
           } else {
-            res.send('Note ' + id + ' deleted!');
+            console.log('Contact  ' + id + "has been deleted.");
+            res.redirect('back');
+            //res.send('Note ' + id + ' deleted!');
           } 
         });
       });
