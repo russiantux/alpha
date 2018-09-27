@@ -4,20 +4,9 @@ module.exports = function(app, db) {
     //timestamps, temperary
     var dt = new Date();
     var utcDate = dt.toUTCString();
+    var htmlValue = " ";
 
-    app.get('/getcontact/:id', (req, res) => {
-        const id = req.params.id;
-        const details = { '_id': new ObjectID(id) };
-        db.collection('alphausers').findOne(details, (err, item) => {
-          if (err) {
-              console.log('[ERROR 150] failed to get user; most likely no internet connection or error in code. Error in detail: ' + err +  + '  [' + utcDate + ']')
-            res.send({'ERROR 150':'failed to get user; most likely no internet connection or error in code.'});
-          } else {
-            console.log( '[INFO] Request to pull contact info for contact ID: ' + id  + ' [' + utcDate + ']');
-            res.send(item);
-          } 
-        });
-      });
+   
 
     const collection = 
     app.post('/addcontact/', (req, res) => {
@@ -90,6 +79,43 @@ module.exports = function(app, db) {
         });
       });
 
+      app.get('/contact/:id', (req, res) => {
+        const id = req.params.id;
+        const details = { '_id': new ObjectID(id) };
+        db.collection('alphausers').findOne(details, (err, item) => {
+          if (err) {
+              console.log('[ERROR 150] failed to get user; most likely no internet connection or error in code. Error in detail: ' + err +  + '  [' + utcDate + ']');
+              
+            res.send(" <html><head><title>contact info</title></head><body><form><a href='http://localhost:8080/'>go back</a>" + "<br><hr>First Name <input type='text' value=' '  disabled><br>Last Name <input type='text' value=' '  disabled><br>Email <input type='text' value=' '  disabled><br>Address <input type='text' value=' '  disabled><br>Phone #1 <input type='text' value=' '  disabled><br>Phone #2 <input type='text' value=' '  disabled><br>Company <input type='text' value=' '  disabled><br>Notes <input type='text' value=' '  disabled><br></form></body></html>"
+      );
+          } else {
+            console.log( '[INFO] Request to pull contact info for contact ID: ' + id  + ' [' + utcDate + ']');
+            //res.send(item);
+            htmlValue += "testingline1<br>"
+            htmlValue += "testingLine2<br>"
+            res.send(htmlValue)
+            
+          // res.send(" <html><head><title>contact info</title></head><body><form><a href='http://localhost:8080/'>go back</a>" + "<br><hr>First Name <input type='text' value=' '  disabled><br>Last Name <input type='text' value=' '  disabled><br>Email <input type='text' value=' '  disabled><br>Address <input type='text' value=' '  disabled><br>Phone #1 <input type='text' value=' '  disabled><br>Phone #2 <input type='text' value=' '  disabled><br>Company <input type='text' value=' '  disabled><br>Notes <input type='text' value=' '  disabled><br></form></body></html>"
+           //);
+          } 
+        });
+      });
+
+      
+      app.get('/getcontact/:id', (req, res) => {
+        const id = req.params.id;
+        const details = { '_id': new ObjectID(id) };
+        db.collection('alphausers').findOne(details, (err, item) => {
+          if (err) {
+              console.log('[ERROR 150] failed to get user; most likely no internet connection or error in code. Error in detail: ' + err +  + '  [' + utcDate + ']');
+          } else {
+            console.log( '[INFO] Request to pull contact info for contact ID: ' + id  + ' [' + utcDate + ']');
+            res.send(item);
+          // res.send(" <html><head><title>contact info</title></head><body><form><a href='http://localhost:8080/'>go back</a>" + "<br><hr>First Name <input type='text' value=' '  disabled><br>Last Name <input type='text' value=' '  disabled><br>Email <input type='text' value=' '  disabled><br>Address <input type='text' value=' '  disabled><br>Phone #1 <input type='text' value=' '  disabled><br>Phone #2 <input type='text' value=' '  disabled><br>Company <input type='text' value=' '  disabled><br>Notes <input type='text' value=' '  disabled><br></form></body></html>"
+           //);
+          } 
+        });
+      });
 
   
 

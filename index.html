@@ -77,7 +77,7 @@
 
                     for (x in myObj) {
                         
-                        txt += "<tr><td>" + myObj[x].fName + "</td><td>" + myObj[x].lName + "</td><td>" + myObj[x]._id + "</td><td><form  method='delete' action='http://localhost:8080/delcontact/" + myObj[x]._id + "'> <input id='btn1' type='submit' value='Submit' onclick='refreshT'> </form> </td></tr>";
+                        txt += "<tr><td><a href='http://localhost:8080/contact/'" + myObj[x]._id + "></a> " + myObj[x].fName + "</td><td>" + myObj[x].lName + "</td><td>" + myObj[x]._id + "</td><td><form  method='delete' action='http://localhost:8080/delcontact/" + myObj[x]._id + "'> <input id='btn1' type='submit' value='Submit' onclick='refreshT'> </form> </td>"+ "</td><td><form  method='get' action='http://localhost:8080/contact/" + myObj[x]._id + "'> <input id='btn1' type='submit' value='get info' onclick='refreshT'> </form> </td></tr>";
                     }
                     txt += "</table>"
                     document.getElementById("tableDemo").innerHTML = txt;
